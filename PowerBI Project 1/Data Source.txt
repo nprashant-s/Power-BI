@@ -1,0 +1,3 @@
+Source content : imported from web:
+
+"https://www.fdic.gov/bank/individual/failed/banklist.csv"

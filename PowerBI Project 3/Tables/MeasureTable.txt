@@ -1,0 +1,227 @@
+Powr BI
+
+----------------------------------------------------------------------------
+
+---------------------------Measure Table-------------------------------
+
+----------------------------------------------------------------------------
+
+% of All Returns = 
+    DIVIDE(
+        [Total Returns],
+        [All Returns]
+    )
+----------------------------------------------------------------------------
+10-Days Rolling Revenue = 
+ CALCULATE(
+     [Total Revenue],
+     DATESINPERIOD(
+         'Calendar Lookup'[Date],
+         MAX(
+             'Calendar Lookup'[Date]
+         ),
+         -10,
+         DAY
+     )
+)
+----------------------------------------------------------------------------
+90-day Rolling Profit = 
+CALCULATE(
+       [Total Profit],
+        DATESINPERIOD(
+        'Calendar Lookup'[Date],
+         LASTDATE(
+             'Calendar Lookup'[Date]
+         ),
+         -90,
+         DAY
+     )
+)
+---------------------------------------------------------------------------------------
+Adjusted Price = 
+[Avarage Retail Price] * (1 + 'Price Adjustment (%)'[Price Adjustment (%) Value])
+-------------------------------------------------------------------------------------
+Adjusted Profit = 
+    [Adjusted Revenue] - [Total Cost]
+----------------------------------------------------------------------------
+Adjusted Revenue = 
+SUMX(
+    'Sales Data',
+    'Sales Data'[OrderQuantity] 
+    *
+    [Adjusted Price]
+)
+----------------------------------------------------------------------------
+All Returns = 
+ CALCULATE(
+     [Total Returns],
+     ALL(
+         'Returns Data'
+        )
+)
+----------------------------------------------------------------------------
+Avarage Retail Price = 
+    AVERAGE('Product Lookup'[ProductPrice])
+----------------------------------------------------------------------------
+Avarage Revenue Per Customer = [Total Revenue]/[Total Customer]
+----------------------------------------------------------------------------
+Bike Return Rate = 
+CALCULATE(
+    [Return Rate],
+    'Product Categories Lookup'[CategoryName]="Bikes"
+)
+----------------------------------------------------------------------------
+Bike Returns = 
+CALCULATE(
+    [Total Returns],
+    'Product Categories Lookup'[CategoryName] = "Bikes"
+)
+----------------------------------------------------------------------------
+Bike sales = 
+CALCULATE(
+    [Quantity Sold],
+    'Product Categories Lookup'[CategoryName]= "Bikes"
+)
+----------------------------------------------------------------------------
+Bulk orders = 
+CALCULATE(
+    [Total Orders],
+    'Sales Data'[OrderQuantity] > 1
+)
+----------------------------------------------------------------------------
+Order Target = [Previous Month Orders] * 1.1
+----------------------------------------------------------------------------
+Order Target Gap = [Total Orders]-[Order Target]
+----------------------------------------------------------------------------
+Previous Month Orders = 
+ CALCULATE(
+    [Total Orders],
+    DATEADD(
+        'Calendar Lookup'[Date],
+        -1,
+        MONTH
+        )
+)
+----------------------------------------------------------------------------
+Previous Month Profit = 
+ CALCULATE(
+    [Total Profit],
+    DATEADD(
+        'Calendar Lookup'[Date],
+        -1,
+        MONTH
+        )
+)
+----------------------------------------------------------------------------
+Previous Month Returns = 
+CALCULATE(
+    [Total Returns],
+    DATEADD(
+        'Calendar Lookup'[Date],
+        -1,
+        MONTH
+        )
+)
+----------------------------------------------------------------------------
+Previous Month Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DATEADD(
+        'Calendar Lookup'[Date],
+        -1,
+        MONTH
+    )
+)
+----------------------------------------------------------------------------
+Profit Target = [Previous Month Profit] * 1.1
+----------------------------------------------------------------------------
+Profit Target Gap = [Total Profit]-[Profit Target]
+----------------------------------------------------------------------------
+Quantity Returned = 
+    sum('Returns Data'[ReturnQuantity])
+    
+----------------------------------------------------------------------------
+Quantity Sold = 
+    SUM('Sales Data'[OrderQuantity])
+
+----------------------------------------------------------------------------
+Return Rate = 
+DIVIDE(
+    'Measure Table'[Total Returns],[Quantity Sold]
+)
+----------------------------------------------------------------------------
+Revenue Target = 
+[Previous Month Revenue] * 1.1
+----------------------------------------------------------------------------
+Revenue Target Gap = [Total Revenue]-[Revenue Target]
+----------------------------------------------------------------------------
+Total Cost = 
+SUMX(
+    'Sales Data',
+    'Sales Data'[OrderQuantity] *
+    RELATED(
+        'Product Lookup'[ProductCost]
+    )
+)
+----------------------------------------------------------------------------
+Total Customer = 
+DISTINCTCOUNT('Sales Data'[CustomerKey])
+----------------------------------------------------------------------------
+Total Orders = 
+DISTINCTCOUNT(
+    'Sales Data'[OrderNumber]
+)
+----------------------------------------------------------------------------
+Total Orders(Customer Details) = 
+IF(
+    HASONEVALUE(
+        'Customer Lookup'[CustomerKey]
+    ),
+    [Total Orders],
+    "-"
+)
+
+----------------------------------------------------------------------------
+Total Profit = 
+    [Total Revenue] - [Total Cost]
+----------------------------------------------------------------------------
+Total Returns = 
+    COUNT('Returns Data'[ReturnQuantity])
+----------------------------------------------------------------------------
+Total Revenue = 
+SUMX(
+    'Sales Data',
+    'Sales Data'[OrderQuantity] * 
+    RELATED(
+    'Product Lookup'[ProductPrice]
+    )
+)
+----------------------------------------------------------------------------
+Total Revenue(Customer Details) = 
+IF(
+    HASONEVALUE(
+        'Customer Lookup'[CustomerKey]
+    ),
+    [Total Revenue],
+    "-"
+)
+
+----------------------------------------------------------------------------
+Weekend orders = 
+CALCULATE(
+    [Total Orders],
+     'Calendar Lookup'[Weekend] = "weekend"
+)
+
+----------------------------------------------------------------------------
+YTD Revenue = 
+CALCULATE(
+    [Total Revenue],
+    DATESYTD(
+        'Calendar Lookup'[Date]
+    )
+)
+----------------------------------------------------------------------------
+
+
+
